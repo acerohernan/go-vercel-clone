@@ -10,6 +10,11 @@ import (
 	"github.com/markbates/goth/providers/github"
 )
 
+type ProviderIndex struct {
+	Providers    []string
+	ProvidersMap map[string]string
+}
+
 func init() {
 	config.LoadEnv()
 	config.ConnectToDB()
@@ -18,7 +23,7 @@ func init() {
 func main() {
 
 	goth.UseProviders(
-		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback"),
+		github.New(os.Getenv("GITHUB_KEY"), os.Getenv("GITHUB_SECRET"), "http://localhost:3000/auth/github/callback", "user:email"),
 	)
 
 	r := gin.Default()
@@ -26,6 +31,8 @@ func main() {
 	// Auth routes
 	r.GET("/auth/:provider", controllers.AuthGetProvider)
 	r.GET("/auth/:provider/callback", controllers.AuthGetProviderCallback)
+
+	// User routes
 
 	r.Run()
 }
