@@ -5,15 +5,11 @@ import (
 
 	"github.com/acerohernan/go-vercel-clone/api-service/config"
 	"github.com/acerohernan/go-vercel-clone/api-service/controllers"
+	"github.com/acerohernan/go-vercel-clone/api-service/middlewares"
 	"github.com/gin-gonic/gin"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/providers/github"
 )
-
-type ProviderIndex struct {
-	Providers    []string
-	ProvidersMap map[string]string
-}
 
 func init() {
 	config.LoadEnv()
@@ -33,6 +29,7 @@ func main() {
 	r.GET("/auth/:provider/callback", controllers.AuthGetProviderCallback)
 
 	// User routes
+	r.GET("/user", middlewares.VerifyJWT(), controllers.GetUserInformation)
 
 	r.Run()
 }
