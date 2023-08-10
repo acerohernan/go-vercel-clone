@@ -1,6 +1,6 @@
 package config
 
 type JWTUser struct {
-	Id    float64
+	Id    int
 	Email string
 }

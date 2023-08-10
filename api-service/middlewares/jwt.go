@@ -49,7 +49,7 @@ func VerifyJWT() gin.HandlerFunc {
 		}
 
 		ctx.Set("user", config.JWTUser{
-			Id:    claims["sub"].(float64),
+			Id:    int(claims["sub"].(float64)),
 			Email: claims["email"].(string),
 		})
 		ctx.Next()

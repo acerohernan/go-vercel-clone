@@ -40,7 +40,7 @@ func AuthGetProviderCallback(ctx *gin.Context) {
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			// Create the user in the database
-			newUsr := &models.User{Email: user.Email, Username: user.Email}
+			newUsr := &models.User{Email: user.Email, Username: user.NickName}
 			result := config.DB.Create(newUsr)
 
 			if result.Error != nil {
@@ -80,5 +80,6 @@ func AuthGetProviderCallback(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"token": tokenString,
+		"user":  user,
 	})
 }
