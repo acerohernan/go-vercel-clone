@@ -29,7 +29,8 @@ func main() {
 	r.GET("/auth/:provider/callback", controllers.AuthGetProviderCallback)
 
 	// User routes
-	r.GET("/user", middlewares.VerifyJWT(), controllers.GetUserInformation)
+	r.GET("/user", middlewares.VerifyJWT(), controllers.UserGetInformation)
+	r.GET("/user/repositories", middlewares.VerifyJWT(), controllers.UserGetGithubRepositories)
 
 	r.Run()
 }

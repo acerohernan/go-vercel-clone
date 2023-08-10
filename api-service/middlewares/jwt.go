@@ -5,14 +5,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/acerohernan/go-vercel-clone/api-service/config"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
-
-type JWTData struct {
-	Sub   string `json:"sub"`
-	Email string `json:"email"`
-}
 
 func VerifyJWT() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -52,9 +48,9 @@ func VerifyJWT() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("user", gin.H{
-			"email": claims["email"].(string),
-			"id":    claims["sub"].(float64),
+		ctx.Set("user", config.JWTUser{
+			Id:    claims["sub"].(float64),
+			Email: claims["email"].(string),
 		})
 		ctx.Next()
 	}

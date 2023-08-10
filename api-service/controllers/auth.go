@@ -17,17 +17,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func AuthGetProvider(c *gin.Context) {
-	gothic.BeginAuthHandler(c.Writer, c.Request)
+func AuthGetProvider(ctx *gin.Context) {
+	gothic.BeginAuthHandler(ctx.Writer, ctx.Request)
 }
 
-func AuthGetProviderCallback(c *gin.Context) {
-	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+func AuthGetProviderCallback(ctx *gin.Context) {
+	user, err := gothic.CompleteUserAuth(ctx.Writer, ctx.Request)
 
 	if err != nil {
 		fmt.Printf("Error at authenticating user with goth. ERROR: %v", err)
 
-		c.AbortWithStatus(http.StatusInternalServerError)
+		ctx.AbortWithStatus(http.StatusInternalServerError)
 
 		return
 	}
@@ -46,7 +46,7 @@ func AuthGetProviderCallback(c *gin.Context) {
 			if result.Error != nil {
 				fmt.Printf("Error at creating new user in the database. ERROR: %v", result.Error)
 
-				c.AbortWithStatus(http.StatusInternalServerError)
+				ctx.AbortWithStatus(http.StatusInternalServerError)
 
 				return
 			}
@@ -55,7 +55,7 @@ func AuthGetProviderCallback(c *gin.Context) {
 		} else {
 			fmt.Printf("Error at querying user in the database. ERROR: %v", tx.Error)
 
-			c.AbortWithStatus(http.StatusInternalServerError)
+			ctx.AbortWithStatus(http.StatusInternalServerError)
 
 			return
 		}
@@ -73,12 +73,12 @@ func AuthGetProviderCallback(c *gin.Context) {
 	if err != nil {
 		fmt.Printf("Error at creating jwt token. ERROR: %v", err)
 
-		c.AbortWithStatus(http.StatusInternalServerError)
+		ctx.AbortWithStatus(http.StatusInternalServerError)
 
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"token": tokenString,
 	})
 }
